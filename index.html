@@ -13,8 +13,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="stylesheet" href="css/normalize.min.css">
-<link rel="stylesheet" type"text/css" href="css/styles.css">
+<link rel="stylesheet" type"text/css" href="styles.css">
 <script src="js/vendor/modernizr-2.8.3-respond-1.4.2.min.js"></script>
+<script language="javascript" type="text/javascript" src="script.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+
 </head>
 <body>
 <div id="app">
@@ -35,115 +38,112 @@
 		</div>
 	</div>
 </div>
-
 <script>
-var streamers = [
-  { name: 'Kolento', imgURL: 'https://goo.gl/GfsYQ4' },
-  { name: 'ESL_SC2', imgURL: 'https://goo.gl/MWZrhO' },
-  { name: 'FreeCodeCamp', imgURL: 'https://goo.gl/yyzbO6' },
-  { name: 'countfapulatv', imgURL: 'https://goo.gl/8gvyDl' },
-  { name: 'trumpSC', imgURL: 'https://goo.gl/QpeVQu' },
-  { name: 'savjz', imgURL: 'https://goo.gl/NeKPvl' },
-  { name: 'Day9tv', imgURL: 'https://goo.gl/OYSmaq'}
-  ];
-/**/
-streamers.forEach(x => {
-  function apiCall() {
-    $.ajax({
-      url: 'https://api.twitch.tv/kraken/streams/' + x.name + '?client_id=k6bflfogfz1is6rgivg6zc7wc64q6n',
-      error: function(xhr, textStatus, errorThrown){
-       alert('request failed');
-       },
-      success: function(data, textStatus) {
-        const row = document.createElement('div')
-        row.className = 'row'
-        const logo = document.createElement('div')
-        logo.id = 'image'
-        let streamTitle = document.createElement('div')
-        streamTitle.id = 'streamtitle'
-        var desc = document.createElement('div')
-        desc.id = 'desc'
-        var app = document.getElementById('app')
-        const image = new Image;
-        image.id = 'logo'
-
-        if (data.stream === null) {
-          streamTitle.textContent = x.name;
-          desc.textContent = "Offline"
-          image.src = x.imgURL
-          row.style.cssText = "background-color: #D9D9D9"
-        } 
-        else {
-          image.src = data.stream.channel.logo
-          streamTitle.textContent = data.stream.channel.name
-          desc.textContent = data.stream.channel.status.substring(0,40) + "...";
-        }
-       
-        //append elements
-        app.appendChild(row)
-        row.appendChild(logo)
-        logo.appendChild(image)
-        row.appendChild(streamTitle)
-        row.appendChild(desc)
-        
-        streamTitle.addEventListener('click', function() {
-          window.open("http://www.twitch.tv/" + x.name)
-        }, false); 
-        
-        streamTitle.addEventListener('mouseover', function() {
-          streamTitle.style.cssText = "color: blue; font-size: 16.5px;"
-        })
-        
-        streamTitle.addEventListener('mouseout', function() {
-          streamTitle.style.cssText = "color: black;"
-        })
-        
-        data.stream === null ? row.className = 'offlinerow' : row.className = 'onlinerow'
-        
-        var online = document.getElementById('online')
-        online.addEventListener('click', function() {
-          data.stream === null ? $('.offlinerow').fadeOut() : $('.onlinerow').fadeIn();
-        })
-        
-        online.addEventListener('mouseover', function() {
-          online.style.cssText = "font-size: 14px;"
-        })
-        online.addEventListener('mouseout', function() {
-          online.style.cssText = "font-size 12px;"
-        })
-        
-        var offline = document.getElementById('offline') 
-        offline.addEventListener('click', function() {
-          data.stream === null ? $('.offlinerow').fadeIn() : $('.onlinerow').fadeOut();
-        })
-        
-         offline.addEventListener('mouseover', function() {
-          offline.style.cssText = "font-size: 14px;"
-        })
-        offline.addEventListener('mouseout', function() {
-          offline.style.cssText = "font-size 12px;"
-        })
-        
-        var all = document.getElementById('all')
-        all.addEventListener('click', function() {
-          $('.onlinerow').fadeIn()
-          $('.offlinerow').fadeIn()
-          if (data.stream === null) {
-            row.style.cssText = "background-color: #D9D9D9;"
-          }
-        })  
-        all.addEventListener('mouseover', function() {
-          all.style.cssText = "font-size: 14px;"
-        })
-        all.addEventListener('mouseout', function() {
-          all.style.cssText = "font-size 12px;"
-        })
-      }
-    })
-  }
-  apiCall();
-})
-
-
+    var streamers = [
+                     { name: 'Kolento', imgURL: 'https://goo.gl/GfsYQ4' },
+                     { name: 'ESL_SC2', imgURL: 'https://goo.gl/MWZrhO' },
+                     { name: 'FreeCodeCamp', imgURL: 'https://goo.gl/yyzbO6' },
+                     { name: 'countfapulatv', imgURL: 'https://goo.gl/8gvyDl' },
+                     { name: 'trumpSC', imgURL: 'https://goo.gl/QpeVQu' },
+                     { name: 'savjz', imgURL: 'https://goo.gl/NeKPvl' },
+                     { name: 'Day9tv', imgURL: 'https://goo.gl/OYSmaq'}
+                     ];
+                     
+                     streamers.forEach(x => {
+                                       function apiCall() {
+                                       $.ajax({
+                                              url: 'https://api.twitch.tv/kraken/streams/' + x.name + '?client_id=k6bflfogfz1is6rgivg6zc7wc64q6n',
+                                              error: function(xhr, textStatus, errorThrown){
+                                              alert('request failed');
+                                              },
+                                              success: function(data, textStatus) {
+                                              const row = document.createElement('div')
+                                              row.className = 'row'
+                                              const logo = document.createElement('div')
+                                              logo.id = 'image'
+                                              let streamTitle = document.createElement('div')
+                                              streamTitle.id = 'streamtitle'
+                                              var desc = document.createElement('div')
+                                              desc.id = 'desc'
+                                              var app = document.getElementById('app')
+                                              const image = new Image;
+                                              image.id = 'logo'
+                                              
+                                              if (data.stream === null) {
+                                              streamTitle.textContent = x.name;
+                                              desc.textContent = "Offline"
+                                              image.src = x.imgURL
+                                              row.style.cssText = "background-color: #D9D9D9"
+                                              }
+                                              else {
+                                              image.src = data.stream.channel.logo
+                                              streamTitle.textContent = data.stream.channel.name
+                                              desc.textContent = data.stream.channel.status.substring(0,40) + "...";
+                                              }
+                                              
+                                              //append elements
+                                              app.appendChild(row)
+                                              row.appendChild(logo)
+                                              logo.appendChild(image)
+                                              row.appendChild(streamTitle)
+                                              row.appendChild(desc)
+                                              
+                                              streamTitle.addEventListener('click', function() {
+                                                                           window.open("http://www.twitch.tv/" + x.name)
+                                                                           }, false);
+                                              
+                                              streamTitle.addEventListener('mouseover', function() {
+                                                                           streamTitle.style.cssText = "color: blue; font-size: 16.5px;"
+                                                                           })
+                                              
+                                              streamTitle.addEventListener('mouseout', function() {
+                                                                           streamTitle.style.cssText = "color: black;"
+                                                                           })
+                                              
+                                              data.stream === null ? row.className = 'offlinerow' : row.className = 'onlinerow'
+                                              
+                                              var online = document.getElementById('online')
+                                              online.addEventListener('click', function() {
+                                                                      data.stream === null ? $('.offlinerow').fadeOut() : $('.onlinerow').fadeIn();
+                                                                      })
+                                              
+                                              online.addEventListener('mouseover', function() {
+                                                                      online.style.cssText = "font-size: 14px;"
+                                                                      })
+                                              online.addEventListener('mouseout', function() {
+                                                                      online.style.cssText = "font-size 12px;"
+                                                                      })
+                                              
+                                              var offline = document.getElementById('offline') 
+                                              offline.addEventListener('click', function() {
+                                                                       data.stream === null ? $('.offlinerow').fadeIn() : $('.onlinerow').fadeOut();
+                                                                       })
+                                              
+                                              offline.addEventListener('mouseover', function() {
+                                                                       offline.style.cssText = "font-size: 14px;"
+                                                                       })
+                                              offline.addEventListener('mouseout', function() {
+                                                                       offline.style.cssText = "font-size 12px;"
+                                                                       })
+                                              
+                                              var all = document.getElementById('all')
+                                              all.addEventListener('click', function() {
+                                                                   $('.onlinerow').fadeIn()
+                                                                   $('.offlinerow').fadeIn()
+                                                                   if (data.stream === null) {
+                                                                   row.style.cssText = "background-color: #D9D9D9;"
+                                                                   }
+                                                                   })  
+                                              all.addEventListener('mouseover', function() {
+                                                                   all.style.cssText = "font-size: 14px;"
+                                                                   })
+                                              all.addEventListener('mouseout', function() {
+                                                                   all.style.cssText = "font-size 12px;"
+                                                                   })
+                                              }
+                                              })
+                                       }
+                                       apiCall();
+                                       })
 </script>
 </body>
